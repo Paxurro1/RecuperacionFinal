@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\controladorAdministrador;
 use App\Http\Controllers\controladorUsuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,4 +24,8 @@ Route::group(['middleware' => ['Cors']], function () {
     //Login
     Route::post('/login', [controladorUsuario::class, 'login']);
 
+    // Admin
+    Route::get('/getUsuarios', [controladorAdministrador::class, 'getUsuarios']);
+    Route::delete('/borrarUsuario/{dni}', [controladorAdministrador::class, 'borrarUsuario']);
+    Route::post('/addUsuario', [controladorAdministrador::class, 'addUsuario']);
 });

@@ -12,10 +12,8 @@ class controladorUsuario extends Controller
 {
     public function login(Request $request)
     {
-        //Extraigo los campos
         $email = $request->get('email');
         $pass = $request->get('pass');
-        //Hago la query
         $usuario = DB::table('usuarios')->where('email', $email)->first();
 
         if ($usuario) {
@@ -23,7 +21,7 @@ class controladorUsuario extends Controller
 
             if ($ckPass) {
                 $usuario = $this->getDatosUsuario($usuario);
-                error_log(print_r($usuario, true));
+                // error_log(print_r($usuario, true));
                 return response()->json($usuario, 200);
             } else {
                 return response()->json(['mensaje' => 'Datos de inicio de sesión incorrectos'], 403);
