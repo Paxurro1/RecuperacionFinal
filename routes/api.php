@@ -28,4 +28,5 @@ Route::group(['middleware' => ['Cors']], function () {
     Route::get('/getUsuarios', [controladorAdministrador::class, 'getUsuarios']);
     Route::delete('/borrarUsuario/{dni}', [controladorAdministrador::class, 'borrarUsuario']);
     Route::post('/addUsuario', [controladorAdministrador::class, 'addUsuario']);
+    Route::post('/editarUsuario', [controladorAdministrador::class, 'editarUsuario']);
 });

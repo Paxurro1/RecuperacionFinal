@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\RolAsignado;
 use App\Models\Usuario;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -21,7 +22,7 @@ class controladorAdministrador extends Controller
                 $u->roles = $roles;
             }
             return response()->json($usuarios, 200);
-        }else {
+        } else {
             return response()->json(['mensaje' => 'Error al obtener los usuarios.'], 402);
         }
     }
@@ -56,11 +57,33 @@ class controladorAdministrador extends Controller
             ]);
             foreach ($roles as $r) {
                 error_log($r);
-                RolAsignado::create(['id_rol' => $r,'dni' => $request->get('dni')]);
+                RolAsignado::create(['id_rol' => $r, 'dni' => $request->get('dni')]);
             }
             return response()->json(['mensaje' => 'Se ha registrado el usuario'], 200);
         } else {
             return response()->json(['mensaje' => 'No se pudo registrar el usuario'], 400);
+        }
+    }
+
+    public function editarUsuario(Request $request)
+    {
+        try {
+            $email = $request->get('email');
+            $nombre = $request->get('nombre');
+            $apellidos = $request->get('apellidos');
+            $dni = $request->get('dni');
+            $pass = Hash::make($request->get('pass'));
+            $roles = $request->get('roles');
+            $dniAntiguo = $request->get('dniAntiguo');
+            Usuario::where('dni', $dniAntiguo)
+                ->update(['dni' => $dni, 'email' => $email, 'nombre' => $nombre, 'apellidos' => $apellidos, 'pass' => $pass]);
+            RolAsignado::where('dni', '=', $dniAntiguo)->delete();
+            foreach ($roles as $r) {
+                RolAsignado::create(['id_rol' => $r, 'dni' => $dni]);
+            }
+            return response()->json(['mensaje' => 'Usuario actualizado'], 200);
+        } catch (Exception $th) {
+            return response()->json(['mensaje' => 'El dni o el email ya está registrado'], 400);
         }
     }
 }
