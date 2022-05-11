@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Proyecto;
+use App\Models\ProyectoAsignado;
 use App\Models\RolAsignado;
 use App\Models\Usuario;
 use Exception;
@@ -84,6 +86,46 @@ class controladorAdministrador extends Controller
             return response()->json(['mensaje' => 'Usuario actualizado'], 200);
         } catch (Exception $th) {
             return response()->json(['mensaje' => 'El dni o el email ya está registrado'], 400);
+        }
+    }
+
+    public function getJefes()
+    {
+        $jefes = Usuario::join('roles_asignados', 'roles_asignados.dni', '=', 'usuarios.dni')
+            ->where('roles_asignados.id_rol', 2)
+            ->get();
+        if ($jefes) {
+            return response()->json($jefes, 200);
+        } else {
+            return response()->json(['mensaje' => 'Error al obtener los jefes.'], 402);
+        }
+    }
+
+    public function getProyectos()
+    {
+        $proyectos = Proyecto::join('usuarios', 'usuarios.dni', '=', 'proyectos.dni_jefe')
+            ->select(['usuarios.nombre', 'proyectos.dni_jefe', 'proyectos.id', 'proyectos.nombre'])
+            ->get();
+        if ($proyectos) {
+            return response()->json($proyectos, 200);
+        } else {
+            return response()->json(['mensaje' => 'Error al obtener los proyectos.'], 402);
+        }
+    }
+
+    public function actualizarProyectos(Request $request)
+    {
+        // error_log(print_r($request->get('proyectos'), true));
+        try {
+            $proyectos = $request->get('proyectos');
+            foreach ($proyectos as $p) {
+                // error_log(print_r($p['id'], true));
+                Proyecto::where('id', $p['id'])
+                    ->update(['nombre' => $p['nombre'], 'dni_jefe' => $p['dni_jefe']]);
+            }
+            return response()->json(['mensaje' => 'Proyectos actualizados'], 200);
+        } catch (Exception $th) {
+            return response()->json(['mensaje' => 'Error al actualizar los proyectos'], 400);
         }
     }
 }

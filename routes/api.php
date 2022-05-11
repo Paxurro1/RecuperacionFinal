@@ -25,8 +25,13 @@ Route::group(['middleware' => ['Cors']], function () {
     Route::post('/login', [controladorUsuario::class, 'login']);
 
     // Admin
+    // Gestión de usuarios
     Route::get('/getUsuarios', [controladorAdministrador::class, 'getUsuarios']);
     Route::delete('/borrarUsuario/{dni}', [controladorAdministrador::class, 'borrarUsuario']);
     Route::post('/addUsuario', [controladorAdministrador::class, 'addUsuario']);
     Route::post('/editarUsuario', [controladorAdministrador::class, 'editarUsuario']);
+    // Gestión de proyectos
+    Route::get('/getJefes', [controladorAdministrador::class, 'getJefes']);
+    Route::get('/getProyectos', [controladorAdministrador::class, 'getProyectos']);
+    Route::post('/actualizarProyectos', [controladorAdministrador::class, 'actualizarProyectos']);
 });
