@@ -13,6 +13,7 @@ class Tarea extends Model
         'descripcion',
         'dificultad',
         'estimacion',
+        'estado',
         'f_comienzo',
         'f_fin',
         'porcentaje',

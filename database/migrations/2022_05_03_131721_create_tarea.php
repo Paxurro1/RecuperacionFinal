@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('descripcion');
             $table->string('dificultad');
             $table->integer('estimacion');
+            $table->integer('estado');
             $table->date('f_comienzo');
             $table->date('f_fin');
             $table->integer('porcentaje');

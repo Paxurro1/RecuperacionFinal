@@ -25,6 +25,7 @@ class TareaFactory extends Factory
             'descripcion' => $this->faker->text(30),
             'dificultad' => $this->faker->randomElement(['S', 'M', 'L', 'XL']),
             'estimacion' => rand(1,15),
+            'estado' => rand(1,3),
             'f_comienzo' => $this->faker->dateTimeBetween('-1 week', '+1 days'),
             'f_fin' => $this->faker->dateTimeBetween('-1 days', '+2 week'),
             'porcentaje' => rand(1,100),
