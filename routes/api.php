@@ -34,4 +34,7 @@ Route::group(['middleware' => ['Cors']], function () {
     Route::get('/getJefes', [controladorAdministrador::class, 'getJefes']);
     Route::get('/getProyectos', [controladorAdministrador::class, 'getProyectos']);
     Route::post('/actualizarProyectos', [controladorAdministrador::class, 'actualizarProyectos']);
+    Route::get('/getProyectoConUsuarios/{id}', [controladorAdministrador::class, 'getProyectoConUsuarios']);
+    Route::get('/getTrabajadores/{id}', [controladorAdministrador::class, 'getTrabajadores']);
+    Route::post('/actualizarTrabajadores', [controladorAdministrador::class, 'actualizarTrabajadores']);
 });
