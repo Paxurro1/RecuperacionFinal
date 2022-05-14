@@ -37,4 +37,9 @@ Route::group(['middleware' => ['Cors']], function () {
     Route::get('/getProyectoConUsuarios/{id}', [controladorAdministrador::class, 'getProyectoConUsuarios']);
     Route::get('/getTrabajadores/{id}', [controladorAdministrador::class, 'getTrabajadores']);
     Route::post('/actualizarTrabajadores', [controladorAdministrador::class, 'actualizarTrabajadores']);
+    // Gestión de tareas
+    Route::get('/getTareas/{id}', [controladorAdministrador::class, 'getTareas']);
+    Route::post('/addTarea', [controladorAdministrador::class, 'addTarea']);
+    Route::delete('/borrarTarea/{id}', [controladorAdministrador::class, 'borrarTarea']);
+    Route::post('/editarTarea', [controladorAdministrador::class, 'editarTarea']);
 });

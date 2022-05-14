@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Proyecto;
 use App\Models\ProyectoAsignado;
 use App\Models\RolAsignado;
+use App\Models\Tarea;
 use App\Models\Usuario;
 use Exception;
 use Illuminate\Http\Request;
@@ -178,12 +179,75 @@ class controladorAdministrador extends Controller
             // error_log(print_r($proyecto['trabajadores'], true));
             ProyectoAsignado::where('id_proyecto', $proyecto['id'])->delete();
             $trabajadores = $proyecto['trabajadores'];
-                foreach ($trabajadores as $trabajador) {
-                    ProyectoAsignado::create([
-                        'id_proyecto' => $proyecto['id'],
-                        'dni' => $trabajador['dni']
-                    ]);
-                }
+            foreach ($trabajadores as $trabajador) {
+                ProyectoAsignado::create([
+                    'id_proyecto' => $proyecto['id'],
+                    'dni' => $trabajador['dni']
+                ]);
+            }
+        } catch (Exception $th) {
+            return response()->json(['mensaje' => $th->getMessage()], 400);
+        }
+    }
+
+    public function getTareas(int $id)
+    {
+        // error_log($id);
+        $tareas = Tarea::where('id_proyecto', $id)
+            ->select(['id', 'descripcion', 'dificultad', 'estimacion', 'estado', 'f_comienzo', 'f_fin', 'porcentaje'])
+            ->get();
+        if ($tareas) {
+            return response()->json($tareas, 200);
+        } else {
+            return response()->json(['mensaje' => 'Error al obtener las tareas.'], 402);
+        }
+    }
+
+    public function addTarea(Request $request)
+    {
+        try {
+            Tarea::create([
+                'descripcion' => $request->get('descripcion'),
+                'dificultad' => $request->get('dificultad'),
+                'estimacion' => $request->get('estimacion'),
+                'estado' => 1,
+                'f_comienzo' => $request->get('f_comienzo'),
+                'f_fin' => $request->get('f_fin'),
+                'porcentaje' => 0,
+                'id_proyecto' => $request->get('id_proyecto')
+            ]);
+            return response()->json(['mensaje' => 'Tarea registrada'], 200);
+        } catch (Exception $th) {
+            return response()->json(['mensaje' => $th->getMessage()], 400);
+        }
+    }
+
+    public function borrarTarea(string $id)
+    {
+        $tarea = Tarea::where('id', '=', $id)->get();
+        if ($tarea) {
+            Tarea::where('id', '=', $id)->delete();
+            return response()->json(['mensaje' => 'Se ha eliminado el usuario'], 200);
+        } else {
+            return response()->json(['mensaje' => 'No se pudo eliminar el usuario'], 400);
+        }
+    }
+
+    public function editarTarea(Request $request)
+    {
+        try {
+            Tarea::where('id', $request->get('id'))
+                ->update([
+                    'descripcion' => $request->get('descripcion'),
+                    'dificultad' => $request->get('dificultad'),
+                    'estimacion' => $request->get('estimacion'),
+                    'estado' => $request->get('estado'),
+                    'f_comienzo' => $request->get('f_comienzo'),
+                    'f_fin' => $request->get('f_fin'),
+                    'porcentaje' => $request->get('porcentaje')
+                ]);
+
+            return response()->json(['mensaje' => 'Tarea actualizadoa'], 200);
         } catch (Exception $th) {
             return response()->json(['mensaje' => $th->getMessage()], 400);
         }
