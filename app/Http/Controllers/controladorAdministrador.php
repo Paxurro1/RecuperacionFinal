@@ -230,9 +230,9 @@ class controladorAdministrador extends Controller
         $tarea = Tarea::where('id', '=', $id)->get();
         if ($tarea) {
             Tarea::where('id', '=', $id)->delete();
-            return response()->json(['mensaje' => 'Se ha eliminado el usuario'], 200);
+            return response()->json(['mensaje' => 'Se ha eliminado la tarea'], 200);
         } else {
-            return response()->json(['mensaje' => 'No se pudo eliminar el usuario'], 400);
+            return response()->json(['mensaje' => 'No se pudo eliminar la tarea'], 400);
         }
     }
 
@@ -334,6 +334,30 @@ class controladorAdministrador extends Controller
             }
         } catch (Exception $th) {
             return response()->json(['mensaje' => $th->getMessage()], 400);
+        }
+    }
+
+    public function addProyecto(Request $request)
+    {
+        try {
+            Proyecto::create([
+                'nombre' => $request->get('nombre'),
+                'dni_jefe' => $request->get('jefe'),
+            ]);
+            return response()->json(['mensaje' => 'Proyecto registrado'], 200);
+        } catch (Exception $th) {
+            return response()->json(['mensaje' => $th->getMessage()], 400);
+        }
+    }
+
+    public function borrarProyecto(string $id)
+    {
+        $proyecto = Proyecto::where('id', '=', $id)->get();
+        if ($proyecto) {
+            proyecto::where('id', '=', $id)->delete();
+            return response()->json(['mensaje' => 'Se ha eliminado el proyecto'], 200);
+        } else {
+            return response()->json(['mensaje' => 'No se pudo eliminar el proyecto'], 400);
         }
     }
 }
