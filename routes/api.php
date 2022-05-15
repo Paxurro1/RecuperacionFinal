@@ -49,4 +49,9 @@ Route::group(['middleware' => ['Cors']], function () {
     Route::get('/getUsuarioConTareas/{id}/{dni}', [controladorAdministrador::class, 'getUsuarioConTareas']);
     Route::get('/getTareasSinAsignar/{id}/{dni}', [controladorAdministrador::class, 'getTareasSinAsignar']);
     Route::post('/actualizarTareas', [controladorAdministrador::class, 'actualizarTareas']);
+
+    //User
+    //Editar perfil
+    Route::post('/editarPerfil', [controladorUsuario::class, 'editarPerfil']);
+    Route::post('/cambiarPass', [controladorUsuario::class, 'cambiarPass']);
 });
