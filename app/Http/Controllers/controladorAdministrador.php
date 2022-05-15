@@ -187,7 +187,7 @@ class controladorAdministrador extends Controller
                     'dni' => $trabajador['dni']
                 ]);
             }
-            return response()->json(['mensaje' => 'Actualizado con exito'], 400);
+            return response()->json(['mensaje' => 'Actualizado con exito'], 200);
         } catch (Exception $th) {
             return response()->json(['mensaje' => $th->getMessage()], 400);
         }
