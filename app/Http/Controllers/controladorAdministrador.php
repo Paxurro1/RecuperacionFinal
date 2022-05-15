@@ -187,6 +187,7 @@ class controladorAdministrador extends Controller
                     'dni' => $trabajador['dni']
                 ]);
             }
+            return response()->json(['mensaje' => 'Actualizado con exito'], 400);
         } catch (Exception $th) {
             return response()->json(['mensaje' => $th->getMessage()], 400);
         }
@@ -278,6 +279,7 @@ class controladorAdministrador extends Controller
             $tareas = Tarea::join('tareas_asignadas', 'tareas_asignadas.id_tarea', '=', 'tareas.id')
                 ->join('usuarios', 'usuarios.dni', '=', 'tareas_asignadas.dni')
                 ->where([['tareas.id_proyecto', '=', $id], ['tareas_asignadas.dni', $dni]])
+                ->select(['tareas.descripcion', 'tareas.id'])
                 ->get();
             $t->tareas = $tareas;
         }
@@ -291,22 +293,47 @@ class controladorAdministrador extends Controller
 
     public function getTareasSinAsignar(int $id, string $dni)
     {
-        error_log($id);
+        // error_log($id);
         $tareasAsignadas = Tarea::join('tareas_asignadas', 'tareas_asignadas.id_tarea', '=', 'tareas.id')
             ->join('usuarios', 'usuarios.dni', '=', 'tareas_asignadas.dni')
             ->where([['tareas.id_proyecto', '=', $id], ['tareas_asignadas.dni', $dni]])
             ->pluck('tareas.id')
             ->toArray();
-        error_log(print_r($tareasAsignadas, true));
+        // error_log(print_r($tareasAsignadas, true));
         $tareas = Tarea::join('proyectos', 'proyectos.id', '=', 'tareas.id_proyecto')
             ->where([['tareas.id_proyecto', '=', $id]])
             ->whereNotIn('tareas.id', $tareasAsignadas)
+            ->select(['tareas.descripcion', 'tareas.id'])
             ->get();
-        error_log(print_r($tareas, true));
+        // error_log(print_r($tareas, true));
         if ($tareas) {
             return response()->json($tareas, 200);
         } else {
             return response()->json(['mensaje' => 'Error al obtener las tareas.'], 402);
+        }
+    }
+
+    public function actualizarTareas(Request $request)
+    {
+        try {
+            $tareasSolas = $request->get('tareasSolas');
+            // error_log(print_r($request['tareasSolas'], true));
+            $trabajador = $request->get('trabajadores')[0];
+            // error_log(print_r($trabajador['tareas'][0]['id'], true));
+            foreach ($tareasSolas as $t) {
+                TareaAsignada::where([['id_tarea', $t['id']], ['dni', $trabajador['dni']]])->delete();
+            }
+            foreach ($trabajador['tareas'] as $t) {
+                // error_log(print_r($t['id'], true));
+                // error_log(print_r($trabajador['dni'], true));
+                TareaAsignada::where([['id_tarea', $t['id']], ['dni', $trabajador['dni']]])->delete();
+                TareaAsignada::create([
+                    'id_tarea' => $t['id'],
+                    'dni' => $trabajador['dni']
+                ]);
+            }
+        } catch (Exception $th) {
+            return response()->json(['mensaje' => $th->getMessage()], 400);
         }
     }
 }
