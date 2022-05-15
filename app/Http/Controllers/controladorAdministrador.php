@@ -61,7 +61,7 @@ class controladorAdministrador extends Controller
                 'pass' => Hash::make($request->get('pass'))
             ]);
             foreach ($roles as $r) {
-                error_log($r);
+                // error_log($r);
                 RolAsignado::create(['id_rol' => $r, 'dni' => $request->get('dni')]);
             }
             return response()->json(['mensaje' => 'Se ha registrado el usuario'], 200);
@@ -77,18 +77,21 @@ class controladorAdministrador extends Controller
             $nombre = $request->get('nombre');
             $apellidos = $request->get('apellidos');
             $dni = $request->get('dni');
-            $pass = Hash::make($request->get('pass'));
             $roles = $request->get('roles');
             $dniAntiguo = $request->get('dniAntiguo');
             Usuario::where('dni', $dniAntiguo)
-                ->update(['dni' => $dni, 'email' => $email, 'nombre' => $nombre, 'apellidos' => $apellidos, 'pass' => $pass]);
+                ->update(['dni' => $dni, 'email' => $email, 'nombre' => $nombre, 'apellidos' => $apellidos]);
             RolAsignado::where('dni', '=', $dniAntiguo)->delete();
+            RolAsignado::where('dni', '=', $dni)->delete();
             foreach ($roles as $r) {
+                error_log($dni);
+                error_log($r);
                 RolAsignado::create(['id_rol' => $r, 'dni' => $dni]);
+                error_log('sigo');
             }
             return response()->json(['mensaje' => 'Usuario actualizado'], 200);
         } catch (Exception $th) {
-            return response()->json(['mensaje' => 'El dni o el email ya está registrado'], 400);
+            return response()->json(['mensaje' => $th->getMessage()], 400);
         }
     }
 
