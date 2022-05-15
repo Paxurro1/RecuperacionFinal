@@ -42,4 +42,8 @@ Route::group(['middleware' => ['Cors']], function () {
     Route::post('/addTarea', [controladorAdministrador::class, 'addTarea']);
     Route::delete('/borrarTarea/{id}', [controladorAdministrador::class, 'borrarTarea']);
     Route::post('/editarTarea', [controladorAdministrador::class, 'editarTarea']);
+    // Asignar tareas
+    Route::get('/getUsuariosProyecto/{id}', [controladorAdministrador::class, 'getUsuariosProyecto']);
+    Route::get('/getUsuarioConTareas/{id}/{dni}', [controladorAdministrador::class, 'getUsuarioConTareas']);
+    Route::get('/getTareasSinAsignar/{id}/{dni}', [controladorAdministrador::class, 'getTareasSinAsignar']);
 });
