@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\controladorAdministrador;
+use App\Http\Controllers\controladorJefe;
 use App\Http\Controllers\controladorUsuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -50,8 +51,20 @@ Route::group(['middleware' => ['Cors']], function () {
     Route::get('/getTareasSinAsignar/{id}/{dni}', [controladorAdministrador::class, 'getTareasSinAsignar']);
     Route::post('/actualizarTareas', [controladorAdministrador::class, 'actualizarTareas']);
 
-    //User
-    //Editar perfil
+    // Jefe
+    // Gestión de proyectos
+    Route::get('/getProyectosJefe/{dni}', [controladorJefe::class, 'getProyectosJefe']);
+    Route::get('/getProyectoConUsuariosJefe/{id}', [controladorJefe::class, 'getProyectoConUsuariosJefe']);
+    Route::get('/getTrabajadoresJefe/{id}', [controladorJefe::class, 'getTrabajadoresJefe']);
+    Route::post('/actualizarTrabajadoresJefe', [controladorJefe::class, 'actualizarTrabajadoresJefe']);
+    // Gestión de tareas
+    Route::get('/getTareasJefe/{id}', [controladorJefe::class, 'getTareasJefe']);
+    Route::post('/addTareaJefe', [controladorJefe::class, 'addTareaJefe']);
+    Route::delete('/borrarTareaJefe/{id}', [controladorJefe::class, 'borrarTareaJefe']);
+    Route::post('/editarTareaJefe', [controladorJefe::class, 'editarTareaJefe']);
+
+    // User
+    // Editar perfil
     Route::post('/editarPerfil', [controladorUsuario::class, 'editarPerfil']);
     Route::post('/cambiarPass', [controladorUsuario::class, 'cambiarPass']);
 });
