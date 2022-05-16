@@ -71,4 +71,11 @@ Route::group(['middleware' => ['Cors']], function () {
     // Editar perfil
     Route::post('/editarPerfil', [controladorUsuario::class, 'editarPerfil']);
     Route::post('/cambiarPass', [controladorUsuario::class, 'cambiarPass']);
+    // Gestión de proyectos
+    Route::get('/getProyectosUsuario/{dni}', [controladorUsuario::class, 'getProyectosUsuario']);
+    Route::get('/getHacer/{id}/{dni}', [controladorUsuario::class, 'getHacer']);
+    Route::get('/getHaciendo/{id}/{dni}', [controladorUsuario::class, 'getHaciendo']);
+    Route::get('/getHecho/{id}/{dni}', [controladorUsuario::class, 'getHecho']);
+    // Gestión de tareas
+    Route::post('/actualizarTareasUsuario', [controladorUsuario::class, 'actualizarTareasUsuario']);
 });

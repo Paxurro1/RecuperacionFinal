@@ -15,7 +15,7 @@ class controladorJefe extends Controller
     public function getProyectosJefe(string $dni)
     {
         $proyectos = Proyecto::join('usuarios', 'usuarios.dni', '=', 'proyectos.dni_jefe')
-        ->where('proyectos.dni_jefe', $dni)
+            ->where('proyectos.dni_jefe', $dni)
             ->select(['usuarios.nombre', 'proyectos.dni_jefe', 'proyectos.id', 'proyectos.nombre'])
             ->get();
         if ($proyectos) {
