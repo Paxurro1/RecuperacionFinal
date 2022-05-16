@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Proyecto;
 use App\Models\ProyectoAsignado;
+use App\Models\Tarea;
 use App\Models\Usuario;
 use Exception;
 use Illuminate\Http\Request;
@@ -78,6 +79,58 @@ class controladorJefe extends Controller
                 ]);
             }
             return response()->json(['mensaje' => 'Actualizado con exito'], 200);
+        } catch (Exception $th) {
+            return response()->json(['mensaje' => $th->getMessage()], 400);
+        }
+    }
+
+    public function getTareasJefe(int $id)
+    {
+        // error_log($id);
+        $tareas = Tarea::where('id_proyecto', $id)
+            ->select(['id', 'descripcion', 'dificultad', 'estimacion', 'estado', 'f_comienzo', 'f_fin', 'porcentaje'])
+            ->get();
+        if ($tareas) {
+            return response()->json($tareas, 200);
+        } else {
+            return response()->json(['mensaje' => 'Error al obtener las tareas.'], 402);
+        }
+    }
+
+    public function editarTareaJefe(Request $request)
+    {
+        try {
+            Tarea::where('id', $request->get('id'))
+                ->update([
+                    'descripcion' => $request->get('descripcion'),
+                    'dificultad' => $request->get('dificultad'),
+                    'estimacion' => $request->get('estimacion'),
+                    'estado' => $request->get('estado'),
+                    'f_comienzo' => $request->get('f_comienzo'),
+                    'f_fin' => $request->get('f_fin'),
+                    'porcentaje' => $request->get('porcentaje')
+                ]);
+
+            return response()->json(['mensaje' => 'Tarea actualizadoa'], 200);
+        } catch (Exception $th) {
+            return response()->json(['mensaje' => $th->getMessage()], 400);
+        }
+    }
+
+    public function addTareaJefe(Request $request)
+    {
+        try {
+            Tarea::create([
+                'descripcion' => $request->get('descripcion'),
+                'dificultad' => $request->get('dificultad'),
+                'estimacion' => $request->get('estimacion'),
+                'estado' => 1,
+                'f_comienzo' => $request->get('f_comienzo'),
+                'f_fin' => $request->get('f_fin'),
+                'porcentaje' => 0,
+                'id_proyecto' => $request->get('id_proyecto')
+            ]);
+            return response()->json(['mensaje' => 'Tarea registrada'], 200);
         } catch (Exception $th) {
             return response()->json(['mensaje' => $th->getMessage()], 400);
         }
