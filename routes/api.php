@@ -61,6 +61,11 @@ Route::group(['middleware' => ['Cors']], function () {
     Route::get('/getTareasJefe/{id}', [controladorJefe::class, 'getTareasJefe']);
     Route::post('/addTareaJefe', [controladorJefe::class, 'addTareaJefe']);
     Route::post('/editarTareaJefe', [controladorJefe::class, 'editarTareaJefe']);
+    // Asignar tareas
+    Route::get('/getUsuariosProyectoJefe/{id}', [controladorJefe::class, 'getUsuariosProyectoJefe']);
+    Route::get('/getUsuarioConTareasJefe/{id}/{dni}', [controladorJefe::class, 'getUsuarioConTareasJefe']);
+    Route::get('/getTareasSinAsignarJefe/{id}/{dni}', [controladorJefe::class, 'getTareasSinAsignarJefe']);
+    Route::post('/actualizarTareasJefe', [controladorJefe::class, 'actualizarTareasJefe']);
 
     // User
     // Editar perfil
