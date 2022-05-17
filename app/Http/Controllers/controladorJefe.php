@@ -217,4 +217,15 @@ class controladorJefe extends Controller
             return response()->json(['mensaje' => $th->getMessage()], 400);
         }
     }
+
+    public function borrarTareaJefe(string $id)
+    {
+        $tarea = Tarea::where('id', '=', $id)->get();
+        if ($tarea) {
+            Tarea::where('id', '=', $id)->delete();
+            return response()->json(['mensaje' => 'Se ha eliminado la tarea'], 200);
+        } else {
+            return response()->json(['mensaje' => 'No se pudo eliminar la tarea'], 400);
+        }
+    }
 }
