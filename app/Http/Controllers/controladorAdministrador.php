@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DiasMaximos;
+use App\Models\Dificultad;
 use App\Models\Proyecto;
 use App\Models\ProyectoAsignado;
 use App\Models\RolAsignado;
@@ -363,4 +365,78 @@ class controladorAdministrador extends Controller
             return response()->json(['mensaje' => 'No se pudo eliminar el proyecto'], 400);
         }
     }
+
+    public function getMaximo()
+    {
+        // error_log('ey');
+        $maximo = DiasMaximos::select(['id', 'dias'])->get();
+        // error_log($maximo);
+        if ($maximo) {
+            return response()->json($maximo[0], 200);
+        } else {
+            return response()->json(['mensaje' => 'Error al obtener los dias máximos.'], 402);
+        }
+    }
+
+    public function setMaximo(Request $request)
+    {
+        error_log($request->get('dias'));
+        try {
+            $id = $request->get('id');
+            $dias = $request->get('dias');
+            DiasMaximos::where('id', $id)
+                ->update(['dias' => $dias]);
+            return response()->json(['mensaje' => 'Días máximos actualizados'], 200);
+        } catch (Exception $th) {
+            return response()->json(['mensaje' => $th->getMessage()], 400);
+        }
+    }
+
+    public function getDificultades()
+    {
+        // error_log('ey');
+        $dificultades = Dificultad::select(['id', 'dificultad'])->get();
+        // error_log($dificultades);
+        if ($dificultades) {
+            return response()->json($dificultades, 200);
+        } else {
+            return response()->json(['mensaje' => 'Error al obtener las dificultades.'], 402);
+        }
+    }
+
+    public function borrarDificultad(string $id)
+    {
+        $dificultad = Dificultad::where('id', '=', $id)->get();
+        if ($dificultad) {
+            Dificultad::where('id', '=', $id)->delete();
+            return response()->json(['mensaje' => 'Se ha eliminado la dificultad'], 200);
+        } else {
+            return response()->json(['mensaje' => 'No se pudo eliminar la dificultad'], 400);
+        }
+    }
+
+    public function addDificultad()
+    {
+        Dificultad::create([
+            'dificultad' => 'nueva dificultad'
+        ]);
+    }
+
+    public function establecerDificultades(Request $request)
+    {
+        // error_log('ey');
+        try {
+            $dificultades = $request->get('dificultades');
+            // error_log(print_r($dificultades, true));
+            foreach ($dificultades as $d) {
+                // error_log(print_r($d['dificultad'], true));
+                Dificultad::where('id', $d['id'])
+                    ->update(['dificultad' => $d['dificultad']]);
+            }
+            return response()->json(['mensaje' => 'Proyectos actualizados'], 200);
+        } catch (Exception $th) {
+            return response()->json(['mensaje' => 'Error al actualizar los proyectos'], 400);
+        }
+    }
+
 }

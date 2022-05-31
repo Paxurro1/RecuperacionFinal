@@ -50,6 +50,13 @@ Route::group(['middleware' => ['Cors']], function () {
     Route::get('/getUsuarioConTareas/{id}/{dni}', [controladorAdministrador::class, 'getUsuarioConTareas']);
     Route::get('/getTareasSinAsignar/{id}/{dni}', [controladorAdministrador::class, 'getTareasSinAsignar']);
     Route::post('/actualizarTareas', [controladorAdministrador::class, 'actualizarTareas']);
+    // Parametrización
+    Route::get('/getMaximo', [controladorAdministrador::class, 'getMaximo']);
+    Route::post('/setMaximo', [controladorAdministrador::class, 'setMaximo']);
+    Route::get('/getDificultades', [controladorAdministrador::class, 'getDificultades']);
+    Route::delete('/borrarDificultad/{id}', [controladorAdministrador::class, 'borrarDificultad']);
+    Route::get('/addDificultad', [controladorAdministrador::class, 'addDificultad']);
+    Route::post('/establecerDificultades', [controladorAdministrador::class, 'establecerDificultades']);
 
     // Jefe
     // Gestión de proyectos
