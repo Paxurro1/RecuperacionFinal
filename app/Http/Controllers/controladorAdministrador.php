@@ -433,9 +433,9 @@ class controladorAdministrador extends Controller
                 Dificultad::where('id', $d['id'])
                     ->update(['dificultad' => $d['dificultad']]);
             }
-            return response()->json(['mensaje' => 'Proyectos actualizados'], 200);
+            return response()->json(['mensaje' => 'Dificultades actualizados'], 200);
         } catch (Exception $th) {
-            return response()->json(['mensaje' => 'Error al actualizar los proyectos'], 400);
+            return response()->json(['mensaje' => 'Error al actualizar las dificultades'], 400);
         }
     }
 
