@@ -45,6 +45,7 @@ Route::group(['middleware' => ['Cors']], function () {
     Route::post('/addTarea', [controladorAdministrador::class, 'addTarea']);
     Route::delete('/borrarTarea/{id}', [controladorAdministrador::class, 'borrarTarea']);
     Route::post('/editarTarea', [controladorAdministrador::class, 'editarTarea']);
+    Route::get('/cerrarTarea/{id}', [controladorAdministrador::class, 'cerrarTarea']);
     // Asignar tareas
     Route::get('/getUsuariosProyecto/{id}', [controladorAdministrador::class, 'getUsuariosProyecto']);
     Route::get('/getUsuarioConTareas/{id}/{dni}', [controladorAdministrador::class, 'getUsuarioConTareas']);
@@ -69,6 +70,7 @@ Route::group(['middleware' => ['Cors']], function () {
     Route::post('/addTareaJefe', [controladorJefe::class, 'addTareaJefe']);
     Route::post('/editarTareaJefe', [controladorJefe::class, 'editarTareaJefe']);
     Route::delete('/borrarTareaJefe/{id}', [controladorJefe::class, 'borrarTareaJefe']);
+    Route::get('/cerrarTareaJefe/{id}', [controladorJefe::class, 'cerrarTareaJefe']);
     // Asignar tareas
     Route::get('/getUsuariosProyectoJefe/{id}', [controladorJefe::class, 'getUsuariosProyectoJefe']);
     Route::get('/getUsuarioConTareasJefe/{id}/{dni}', [controladorJefe::class, 'getUsuarioConTareasJefe']);
